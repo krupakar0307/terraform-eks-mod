@@ -1,12 +1,12 @@
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
   version = "5.4.0"
-  name = "my-vpc"
-  cidr = "10.0.0.0/16"
+  name = var.vpc_name
+  cidr = var.vpc_cidr
 
-  azs             = ["ap-south-1a", "ap-south-1b"]
-  private_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
-  public_subnets  = ["10.0.3.0/24", "10.0.4.0/24"]
+  azs             = var.azs                 ##["ap-south-1a", "ap-south-1b"]
+  private_subnets = var.private_subnets     ##["10.0.1.0/24", "10.0.2.0/24"]
+  public_subnets  = var.public_subnets      ##["10.0.3.0/24", "10.0.4.0/24"]
 
   enable_nat_gateway = true
   single_nat_gateway = true
@@ -17,6 +17,6 @@ module "vpc" {
 
   tags = {
     Terraform = "true"
-    Environment = "dev"
+    Environment = var.vpc-tags
   }
 }

@@ -2,8 +2,8 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 19.0"
 
-  cluster_name    = "eks-test"
-  cluster_version = "1.27"
+  cluster_name    = var.cluster.name
+  cluster_version = var.cluster.version
 
   cluster_endpoint_public_access  = true
   create_cloudwatch_log_group = false
@@ -12,44 +12,25 @@ module "eks" {
   enable_irsa = true
   eks_managed_node_group_defaults = {
     disk_size = 50
-    ami_type = "BOTTLEROCKET_x86_64"
+    ami_type = var.eks-node-grp-1.ami_type
     # image_id = "ami-083a4b47b26349164"
     manage_aws_auth_configmap = true
   }
 
-
   eks_managed_node_groups = {
-    node-group-general = {
-      desired_size = 1
-      min_size     = 1
-      max_size     = 3
+    (var.eks-node-grp-1.node_group_name) = {
+      desired_size = var.eks-node-grp-1.desired_size
+      min_size     = var.eks-node-grp-1.min_size
+      max_size     = var.eks-node-grp-1.max_size
 
+      labels = var.eks-labels
+      
+      instance_types = [var.eks-node-grp-1.instance_types]
+      capacity_type  = var.eks-node-grp-1.capacity_type
       labels = {
-        role = "general"
+        role = var.eks-node-grp-1.labels
       }
-
-      instance_types = ["t3.small"]
-      capacity_type  = "ON_DEMAND"
-
-    }
-
-    node-group-spot = {
-      desired_size = 2
-      min_size     = 1
-      max_size     = 3
-
-      labels = {
-        role = "spot"
-      }
-
-      taints = [{
-        key    = "market"
-        value  = "spot"
-        effect = "NO_SCHEDULE"
-      }]
-
-      instance_types = ["t3.micro"]
-      capacity_type  = "SPOT"
+      # taints  =   [var.node_grp-1-taints]
     }
   }
 }

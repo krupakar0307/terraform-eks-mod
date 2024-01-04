@@ -28,7 +28,7 @@ cluster = {
 
 eks-node-grp-1 = {
     "node_group_name"     =   "node-group-1"
-    "desired_size"        =   "5"
+    "desired_size"        =   "2"
     "min_size"            =   "1"
     "max_size"            =    "5"
     "instance_types"      =    "t3.large"
